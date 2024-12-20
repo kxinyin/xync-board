@@ -19,8 +19,9 @@ chore: other changes (e.g., build tasks, dependency updates)
 1. create nextjs app router
 2. install and setup electron
 3. install and setup mongodb
+4. setup authjs (next-auth v5.0-beta) and login module
 
 ## Setup Steps
 
-1. install nodejs, brew
+1. install nodejs and brew
 2. install mongodb community and mongodb compass
