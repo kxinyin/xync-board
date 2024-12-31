@@ -11,8 +11,10 @@ var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require
 var { BrowserWindow, app, ipcMain, session } = __require("electron");
 var { join } = __require("path");
 var { startServer } = __require("next/dist/server/lib/start-server");
-__require("dotenv").config();
-var PORT = process.env.NEXT_PORT;
+var { is } = __require("@electron-toolkit/utils");
+var getPortPlease = __require("get-port-please");
+var IP_ADDRESS = "192.168.1.154";
+var PORT = "3000";
 var createWindow = async () => {
   const mainWindow = new BrowserWindow({
     // common app window
@@ -29,16 +31,14 @@ var createWindow = async () => {
       // Separates the renderer's JS context from the preload script for security
     }
   });
-  let url = `http://localhost:${PORT}`;
   const loadURL = async () => {
-    if (process.env.NODE_ENV === "development") {
-      mainWindow.loadURL(url);
+    if (is.dev) {
+      mainWindow.loadURL(`http://localhost:${PORT}/login`);
     } else {
       try {
-        const { host, port } = await startNextJSServer();
+        const port = await startNextJSServer();
         console.log("Next.js server started on port:", port);
-        url = `http://${host}:${port}`;
-        mainWindow.loadURL(`http://${host}:${port}`);
+        mainWindow.loadURL(`http://${IP_ADDRESS}:${port}/login`);
       } catch (error) {
         console.error("Error starting Next.js server:", error);
       }
@@ -51,20 +51,21 @@ var createWindow = async () => {
 };
 var startNextJSServer = async () => {
   try {
-    const host = process.env.NEXT_IP_ADDRESS;
-    const port = PORT;
+    const nextJSPort = await getPortPlease.getPort({
+      portRange: [30011, 5e3]
+    });
     const webDir = join(app.getAppPath(), "app");
     await startServer({
       dir: webDir,
       isDev: false,
-      hostname: host,
-      port,
+      hostname: IP_ADDRESS,
+      port: nextJSPort,
       customServer: true,
       allowRetry: false,
       keepAliveTimeout: 5e3,
       minimalMode: true
     });
-    return { host, port };
+    return nextJSPort;
   } catch (error) {
     console.error("Error starting Next.js server:", error);
     throw error;

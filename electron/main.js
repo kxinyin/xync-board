@@ -1,9 +1,13 @@
+"use strict";
+
 const { BrowserWindow, app, ipcMain, session } = require("electron");
 const { join } = require("path");
 const { startServer } = require("next/dist/server/lib/start-server");
-require("dotenv").config();
+const { is } = require("@electron-toolkit/utils");
+const getPortPlease = require("get-port-please");
 
-const PORT = process.env.NEXT_PORT;
+const PORT = "3000";
+const IP_ADDRESS = "192.168.1.154";
 
 const createWindow = async () => {
   const mainWindow = new BrowserWindow({
@@ -20,19 +24,14 @@ const createWindow = async () => {
     },
   });
 
-  let url = `http://localhost:${PORT}`;
-
   const loadURL = async () => {
-    if (process.env.NODE_ENV === "development") {
-      mainWindow.loadURL(url);
+    if (is.dev) {
+      mainWindow.loadURL(`http://localhost:${PORT}/login`);
     } else {
       try {
-        const { host, port } = await startNextJSServer();
+        const port = await startNextJSServer();
         console.log("Next.js server started on port:", port);
-
-        url = `http://${host}:${port}`;
-
-        mainWindow.loadURL(`http://${host}:${port}`);
+        mainWindow.loadURL(`http://${IP_ADDRESS}:${port}/login`);
       } catch (error) {
         console.error("Error starting Next.js server:", error);
       }
@@ -49,23 +48,23 @@ const createWindow = async () => {
 
 const startNextJSServer = async () => {
   try {
-    // TODO: use a dynamic port for sub app
-    const host = process.env.NEXT_IP_ADDRESS;
-    const port = PORT;
+    const nextJSPort = await getPortPlease.getPort({
+      portRange: [30011, 5000],
+    });
     const webDir = join(app.getAppPath(), "app");
 
     await startServer({
       dir: webDir,
       isDev: false,
-      hostname: host,
-      port: port,
+      hostname: IP_ADDRESS,
+      port: nextJSPort,
       customServer: true,
       allowRetry: false,
       keepAliveTimeout: 5000,
       minimalMode: true,
     });
 
-    return { host, port };
+    return nextJSPort;
   } catch (error) {
     console.error("Error starting Next.js server:", error);
     throw error;
