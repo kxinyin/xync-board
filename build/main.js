@@ -13,8 +13,8 @@ var { join } = __require("path");
 var { startServer } = __require("next/dist/server/lib/start-server");
 var { is } = __require("@electron-toolkit/utils");
 var getPortPlease = __require("get-port-please");
-var IP_ADDRESS = "192.168.1.154";
 var PORT = "3000";
+var IP_ADDRESS = "localhost";
 var createWindow = async () => {
   const mainWindow = new BrowserWindow({
     // common app window
@@ -27,8 +27,10 @@ var createWindow = async () => {
       preload: join(__dirname, "preload.js"),
       nodeIntegration: false,
       // Allow Node.js APIs in the renderer, 'false' safer
-      contextIsolation: true
+      contextIsolation: true,
       // Separates the renderer's JS context from the preload script for security
+      spellcheck: false
+      // To disable autofill
     }
   });
   const loadURL = async () => {

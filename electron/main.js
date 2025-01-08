@@ -7,7 +7,7 @@ const { is } = require("@electron-toolkit/utils");
 const getPortPlease = require("get-port-please");
 
 const PORT = "3000";
-const IP_ADDRESS = "192.168.1.154";
+const IP_ADDRESS = "localhost";
 
 const createWindow = async () => {
   const mainWindow = new BrowserWindow({
@@ -21,6 +21,7 @@ const createWindow = async () => {
       preload: join(__dirname, "preload.js"),
       nodeIntegration: false, // Allow Node.js APIs in the renderer, 'false' safer
       contextIsolation: true, // Separates the renderer's JS context from the preload script for security
+      spellcheck: false, // To disable autofill
     },
   });
 
