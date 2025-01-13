@@ -20,6 +20,9 @@ chore: other changes (e.g., build tasks, dependency updates)
 2. install and setup electron
 3. install and setup mongodb
 4. setup authjs (next-auth v5.0-beta) and login module
+5. create authenticated layout and dashboard
+6. create admin layout and company module
+7. create employee module
 
 ## Setup Steps
 
