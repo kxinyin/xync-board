@@ -24,6 +24,7 @@ chore: other changes (e.g., build tasks, dependency updates)
 6. create admin layout and company module
 7. create employee module
 8. create role module
+9. create status module
 
 ## Setup Steps
 
