@@ -1,4 +1,4 @@
-import { connectToDatabase } from "@/lib/mongodb";
+import { connectToDatabase } from "@/src/lib/mongodb";
 import { createLog } from "../../_helpers/createLog";
 import { compare } from "bcrypt";
 
