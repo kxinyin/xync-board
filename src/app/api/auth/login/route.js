@@ -1,4 +1,5 @@
 import { connectToDatabase } from "@/lib/mongodb";
+import { createLog } from "../../_helpers/createLog";
 import { compare } from "bcrypt";
 
 export async function POST(request) {
@@ -7,11 +8,12 @@ export async function POST(request) {
   const { db } = await connectToDatabase();
 
   const user = await db.collection("employees").findOne(
-    { employee_id: username },
+    { username: username },
     {
       projection: {
         _id: 0,
-        display_name: 1,
+        name: 1,
+        employee_id: 1,
         role_id: 1,
         password: 1,
       },
@@ -34,10 +36,18 @@ export async function POST(request) {
     );
   }
 
+  const message = "Login successful";
+
+  await createLog({
+    db,
+    event_type: "USER_LOGIN",
+    message,
+    log_by: { employee_id: user.employee_id, name: user.name },
+  });
+
   const { password: _, ...userInfo } = user;
 
-  return new Response(
-    JSON.stringify({ message: "Login successful", data: userInfo }),
-    { status: 200 }
-  );
+  return new Response(JSON.stringify({ message, data: userInfo }), {
+    status: 200,
+  });
 }

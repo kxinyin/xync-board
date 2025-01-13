@@ -19,7 +19,15 @@ const providers = [
 
         const { data } = await res.json();
 
-        return data ? { name: data.display_name, role_id: data.role_id } : null;
+        // TODO: get permissions
+
+        return data
+          ? {
+              name: data.name,
+              employee_id: data.employee_id,
+              role_id: data.role_id,
+            }
+          : null;
       } catch (error) {
         return null;
       }
@@ -30,12 +38,14 @@ const providers = [
 const callbacks = {
   jwt({ token, user }) {
     if (user) {
+      token.employee_id = user.employee_id;
       token.role_id = user.role_id;
     }
 
     return token;
   },
   session({ session, token }) {
+    session.user.employee_id = token.employee_id;
     session.user.role_id = token.role_id;
 
     return session;
