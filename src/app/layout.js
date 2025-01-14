@@ -13,7 +13,7 @@ const roboto = Roboto({
 
 export const metadata = {
   title: "Xync Board",
-  description: "",
+  description: "Welcome to Xync Board.",
 };
 
 export default function RootLayout({ children }) {

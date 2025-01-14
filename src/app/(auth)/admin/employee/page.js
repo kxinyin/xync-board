@@ -3,6 +3,11 @@ import { getRoleOptions } from "@/src/services/api/role";
 import { getBranchOptions } from "@/src/services/api/company";
 import AntdEmployeeTable from "./antdEmployeeTable";
 
+export const metadata = {
+  title: "Employee | Xync Board",
+  description: "Manage employee in the Xync Board admin section.",
+};
+
 export default async function AdminEmployee() {
   const employees = await getEmployees();
   const roles = await getRoleOptions();

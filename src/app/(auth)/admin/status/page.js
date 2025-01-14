@@ -2,6 +2,11 @@ import { getRoleOptions } from "@/src/services/api/role";
 import { getStatus } from "@/src/services/api/status";
 import AntdStatusTable from "./antdStatusTable";
 
+export const metadata = {
+  title: "Status | Xync Board",
+  description: "Manage status in the Xync Board admin section.",
+};
+
 export default async function AdminStatusControl() {
   const status = await getStatus();
   const roles = await getRoleOptions();

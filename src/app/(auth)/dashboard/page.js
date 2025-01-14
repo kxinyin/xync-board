@@ -4,7 +4,7 @@ import AntdDashboardCard from "./antdDashboardCard";
 
 export const metadata = {
   title: "Dashboard | Xync Board",
-  description: "",
+  description: "Welcome to the dashboard of Xync Board.",
 };
 
 export default async function DashboardPage() {
