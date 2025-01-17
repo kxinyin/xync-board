@@ -4,6 +4,7 @@ import { Button, message, Popconfirm, Space, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
 import AntdEmployeeModal from "./antdEmployeeModal";
 import { deleteEmployee } from "@/src/services/api/employee";
+import { mapTableFilterData, statusFilterData } from "@/src/services/dataUtils";
 
 export default function AntdEmployeeTable({
   employeesData,
@@ -14,15 +15,14 @@ export default function AntdEmployeeTable({
     username: "",
     password: "",
     name: "",
-    resigned: false,
     gender: "female",
-    role_id: "",
     role_name: "",
     branch_name: "",
     contact_no: "",
     new_ic_no: "",
     old_ic_no: "",
     address: "",
+    is_enabled: true,
   };
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -61,36 +61,15 @@ export default function AntdEmployeeTable({
     if (employeesData) setDataSource(employeesData);
   }, [employeesData]);
 
-  const dataName = employeesData.map((each) => {
-    return { text: each.name, value: each.name };
-  });
-
-  const dataUsername = employeesData.map((each) => {
-    return { text: each.username, value: each.username };
-  });
-
-  const dataRole = rolesData.map((each) => {
-    return { text: each.name, value: each.role_id };
-  });
-
-  const dataBranch = branchesData.map((each) => {
-    return { text: each.name, value: each.branch_id };
-  });
-  const dataResigned = [
-    { text: "Resigned", value: true },
-    { text: "Active", value: false },
-  ];
+  const dataName = mapTableFilterData(employeesData, "name");
+  const dataUsername = mapTableFilterData(employeesData, "username");
+  const dataRole = mapTableFilterData(rolesData, "name", "role_id");
+  const dataBranch = mapTableFilterData(branchesData, "name", "branch_id");
+  const dataStatus = statusFilterData;
 
   const columns = [
     {
-      title: "Id",
-      key: "employee_id",
-      dataIndex: "employee_id",
-      responsive: ["lg"],
-      sorter: (a, b) => a.employee_id - b.employee_id,
-    },
-    {
-      title: "Full Name",
+      title: "Employee Name",
       key: "name",
       dataIndex: "name",
       filters: dataName,
@@ -120,6 +99,7 @@ export default function AntdEmployeeTable({
       title: "Branch",
       key: "branch_name",
       dataIndex: "branch_name",
+      align: "center",
       responsive: ["md"],
       filters: dataBranch,
       onFilter: (value, record) => record.branch_name === value,
@@ -127,21 +107,21 @@ export default function AntdEmployeeTable({
     },
     {
       title: "Status",
-      key: "resigned",
-      dataIndex: "resigned",
+      key: "is_enabled",
+      dataIndex: "is_enabled",
       align: "center",
       responsive: ["md"],
-      filters: dataResigned,
-      onFilter: (value, record) => record.resigned === value,
-      sorter: (a, b) => a.resigned - b.resigned,
+      filters: dataStatus,
+      onFilter: (value, record) => record.is_enabled === value,
+      sorter: (a, b) => a.is_enabled - b.is_enabled,
       render: (value, index) => (
-        <Tag key={index} color={value ? "red" : "green"}>
-          {value ? "Resigned" : "Active"}
+        <Tag key={index} color={value ? "green" : "red"}>
+          {value ? "Active" : "Inactive"}
         </Tag>
       ),
     },
     {
-      title: "Actions",
+      title: "",
       key: "actions",
       fixed: "right",
       align: "center",

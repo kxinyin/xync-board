@@ -26,7 +26,7 @@ export default function AntdEmployeeModal({
 
       const { success, message, data } = isNewEmp
         ? await createEmployee(values)
-        : await updateEmployee(values.employee_id, values);
+        : await updateEmployee(record.employee_id, values);
 
       if (success) {
         const selectedRole = rolesData.find(
@@ -43,13 +43,14 @@ export default function AntdEmployeeModal({
               )
         );
 
-        setConfirmLoading(false);
         handleCancel();
 
         messageApi.success(message);
       } else {
         messageApi.error(message);
       }
+
+      setConfirmLoading(false);
     } catch (error) {
       setConfirmLoading(false);
       form.scrollToField(error.errorFields[0].name[0]);
@@ -73,7 +74,7 @@ export default function AntdEmployeeModal({
   return (
     <Modal
       centered
-      width={700}
+      width={650}
       maskClosable={false}
       open={open}
       title={record?.name || "New Employee"}

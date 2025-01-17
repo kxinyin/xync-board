@@ -19,9 +19,10 @@ export async function PUT(request, { params }) {
   // Check for data differences
   const {
     _id: temp1,
-    password: temp2,
-    created_at: temp3,
-    updated_at: temp4,
+    employee_id: temp2,
+    password: temp3,
+    created_at: temp4,
+    updated_at: temp5,
     ...existingData
   } = logBeforeData;
 
