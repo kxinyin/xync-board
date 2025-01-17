@@ -1,8 +1,10 @@
 "use client";
 
-import { Button, message, Space, Table, Tag } from "antd";
+import { Button, message, Popconfirm, Space, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
 import AntdRoleModal from "./antdRoleModal";
+import { mapTableFilterData, statusFilterData } from "@/src/services/dataUtils";
+import { deleteRole } from "@/src/services/api/role";
 
 export default function AntdRoleTable({ rolesData, modulesData }) {
   const defaultRecord = { name: "", is_enabled: true, permission: [] };
@@ -12,6 +14,7 @@ export default function AntdRoleTable({ rolesData, modulesData }) {
   const [dataSource, setDataSource] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [record, setRecord] = useState({ ...defaultRecord });
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const openModal = () => setIsOpen(true);
 
@@ -20,18 +23,28 @@ export default function AntdRoleTable({ rolesData, modulesData }) {
     setIsOpen(false);
   };
 
+  const confirmDelete = async (role_id) => {
+    setDeleteLoading(true);
+
+    const { success, message } = await deleteRole(role_id);
+
+    if (success) {
+      setDataSource((prev) => prev.filter((item) => item.role_id !== role_id));
+
+      messageApi.success(message);
+    } else {
+      messageApi.error(message);
+    }
+
+    setDeleteLoading(false);
+  };
+
   useEffect(() => {
     if (rolesData) setDataSource(rolesData);
   }, [rolesData]);
 
-  const dataName = rolesData.map((each) => {
-    return { text: each.name, value: each.role_id };
-  });
-
-  const dataStatus = [
-    { text: "Active", value: true },
-    { text: "Inactive", value: false },
-  ];
+  const dataName = mapTableFilterData(rolesData, "name", "role_id");
+  const dataStatus = statusFilterData;
 
   const columns = [
     {
@@ -43,7 +56,7 @@ export default function AntdRoleTable({ rolesData, modulesData }) {
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
-      title: "No. of Employee Assign",
+      title: "No. of Employees Assigned",
       key: "employee_count",
       dataIndex: "employee_count",
       align: "center",
@@ -64,7 +77,7 @@ export default function AntdRoleTable({ rolesData, modulesData }) {
       ),
     },
     {
-      title: "Actions",
+      title: "",
       key: "actions",
       fixed: "right",
       align: "center",
@@ -81,6 +94,23 @@ export default function AntdRoleTable({ rolesData, modulesData }) {
           >
             Edit
           </Button>
+
+          <Popconfirm
+            title="Delete Role"
+            description={
+              <span>
+                Are you sure you want to delete{" "}
+                <span className="font-black">{record.name}</span>?
+              </span>
+            }
+            placement="topRight"
+            onConfirm={() => confirmDelete(record.role_id)}
+            okButtonProps={{ loading: deleteLoading }}
+          >
+            <Button color="danger" variant="outlined" size="small">
+              Delete
+            </Button>
+          </Popconfirm>
         </Space>
       ),
     },

@@ -1,4 +1,4 @@
-import { Col, Form, Input, Row, Switch, Transfer } from "antd";
+import { Col, Divider, Form, Input, Row, Switch, Transfer } from "antd";
 
 export default function AntdRoleForm({
   form,
@@ -9,19 +9,9 @@ export default function AntdRoleForm({
   return (
     <Form form={form} layout="vertical">
       <Row gutter={[16, 16]}>
-        <Col xs={16}>
+        <Col xs={24}>
           <Form.Item label="Role Name" name="name" rules={[{ required: true }]}>
             <Input placeholder="Enter role name" />
-          </Form.Item>
-        </Col>
-
-        <Col xs={8}>
-          <Form.Item
-            label="Status"
-            name="is_enabled"
-            rules={[{ required: true }]}
-          >
-            <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
           </Form.Item>
         </Col>
 
@@ -39,11 +29,26 @@ export default function AntdRoleForm({
               render={(item) => item.name}
               targetKeys={permission}
               onChange={handleTransferChange}
-              listStyle={{ width: 250, height: 350 }}
+              listStyle={{ width: "100%", height: 350 }}
             />
           </Form.Item>
         </Col>
       </Row>
+
+      <Divider style={{ margin: "0 0 1.5rem" }}></Divider>
+
+      <Form.Item
+        layout="horizontal"
+        label="Role Status"
+        name="is_enabled"
+        rules={[{ required: true }]}
+      >
+        <Switch
+          checkedChildren="Active"
+          unCheckedChildren="Inactive"
+          style={{ marginLeft: "6px" }}
+        />
+      </Form.Item>
     </Form>
   );
 }
