@@ -3,7 +3,7 @@
 import { updateCompanyInfo } from "@/src/services/api/company";
 import { scrollToTop } from "@/src/services/scrollUtils";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Form, Input, message, Row } from "antd";
+import { Button, Card, Col, Form, Input, message, Row, Space } from "antd";
 import { useState } from "react";
 
 export default function AntdCompanyForm({ data }) {
@@ -204,17 +204,15 @@ export default function AntdCompanyForm({ data }) {
 
       {/* Buttons */}
       <Form.Item>
-        <Row justify="end" gutter={16} style={{ marginTop: "16px" }}>
-          <Col>
+        <Row justify="end">
+          <Space>
             <Button danger onClick={handleCancel}>
               Cancel
             </Button>
-          </Col>
-          <Col>
             <Button type="primary" htmlType="submit">
               Save
             </Button>
-          </Col>
+          </Space>
         </Row>
       </Form.Item>
     </Form>
