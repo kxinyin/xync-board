@@ -7,7 +7,7 @@ export function getPathParentKey(pathname) {
   return splitPath[0];
 }
 
-// export function getPathSub1Key(pathname) {
-//   const splitPath = splitPathname(pathname);
-//   return splitPath[1];
-// }
+export function getPathSub1Key(pathname) {
+  const splitPath = splitPathname(pathname);
+  return splitPath[1];
+}

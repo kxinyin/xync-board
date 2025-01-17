@@ -6,7 +6,8 @@ import { LogoutOutlined } from "@ant-design/icons";
 import { redirect, usePathname } from "next/navigation";
 import { logout } from "@/src/auth/helpers";
 import { useEffect, useState } from "react";
-import { getPathParentKey, splitPathname } from "@/src/services/pathname";
+import { getPathParentKey, splitPathname } from "@/src/services/pathUtils";
+import { startCase } from "lodash";
 
 export default function AuthLayout({ children }) {
   const pathname = usePathname();
@@ -17,7 +18,7 @@ export default function AuthLayout({ children }) {
   const handleBreadcrumbs = (keyPath) => {
     setBreadcrumbItems(
       keyPath.map((item) => {
-        return { title: item.charAt(0).toUpperCase() + item.slice(1) };
+        return { title: startCase(item) };
       })
     );
   };

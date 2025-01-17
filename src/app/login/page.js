@@ -2,7 +2,7 @@ import AntdLoginForm from "./antdLoginForm.client";
 
 export const metadata = {
   title: "Log In | Xync Board",
-  description: "",
+  description: "Sign in to Xync Board.",
 };
 
 // TODO: Form validation
