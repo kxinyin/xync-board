@@ -1,6 +1,6 @@
 import { connectToDatabase } from "@/src/lib/mongodb";
 import { createLog } from "@/src/app/api/_helpers/createLog";
-import { currentTime } from "@/src/services/moment";
+import { currentTime } from "@/src/services/timeUtils";
 import { isEqual } from "lodash";
 
 export async function PUT(request, { params }) {

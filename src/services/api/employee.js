@@ -1,4 +1,4 @@
-import { handleRequest } from "../apiRequest";
+import { handleRequest } from "../apiUtils";
 
 const apiRequest = handleRequest("Failed to fetch employees data");
 

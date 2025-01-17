@@ -1,7 +1,7 @@
 "use client";
 
 import { SUB_MENU_ADMIN } from "@/src/lib/constants";
-import { getPathSub1Key } from "@/src/services/pathname";
+import { getPathSub1Key } from "@/src/services/pathUtils";
 import { Menu } from "antd";
 import { redirect, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";

@@ -1,8 +1,8 @@
-import { handleRequest } from "../apiRequest";
+import { handleRequest } from "../apiUtils";
 
 const apiRequest = handleRequest("Failed to fetch status data");
 
-export async function getStatusOption(role_id) {
+export async function getStatusOptions(role_id) {
   const url = `/api/status/option/${role_id}`;
   return apiRequest(url, { cache: "no-store" });
 }

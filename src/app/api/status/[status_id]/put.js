@@ -1,5 +1,5 @@
 import { connectToDatabase } from "@/src/lib/mongodb";
-import { currentTime } from "@/src/services/moment";
+import { currentTime } from "@/src/services/timeUtils";
 import { isEqual } from "lodash";
 import { createLog } from "../../_helpers/createLog";
 
@@ -38,11 +38,9 @@ export async function PUT(request, { params }) {
   }
 
   // Update status
-  const result = await db
-    .collection(COLLECTION)
-    .updateOne(FILTER, {
-      $set: { ...incomingData, updated_at: currentTime() },
-    });
+  const result = await db.collection(COLLECTION).updateOne(FILTER, {
+    $set: { ...incomingData, updated_at: currentTime() },
+  });
 
   if (result.matchedCount === 0) {
     return new Response(

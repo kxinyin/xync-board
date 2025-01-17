@@ -1,5 +1,5 @@
 import { getRoles } from "@/src/services/api/role";
-import { getModuleOptions } from "@/src/services/api/parameter";
+import { getSystemModuleOptions } from "@/src/services/api/parameter";
 import AntdRoleTable from "./antdRoleTable";
 
 export const metadata = {
@@ -9,7 +9,7 @@ export const metadata = {
 
 export default async function AdminRole() {
   const roles = await getRoles();
-  const modules = await getModuleOptions();
+  const modules = await getSystemModuleOptions();
 
   // TODO: Form validation
 
