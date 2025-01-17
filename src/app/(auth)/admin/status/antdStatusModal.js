@@ -46,13 +46,14 @@ export default function AntdStatusModal({
               )
         );
 
-        setConfirmLoading(false);
         handleCancel();
 
         messageApi.success(message);
       } else {
         messageApi.error(message);
       }
+
+      setConfirmLoading(false);
     } catch (error) {
       setConfirmLoading(false);
       form.scrollToField(error.errorFields[0].name[0]);
@@ -94,7 +95,7 @@ export default function AntdStatusModal({
   return (
     <Modal
       centered
-      width={600}
+      width={650}
       maskClosable={false}
       open={open}
       title={record?.code || "New Status"}

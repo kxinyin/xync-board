@@ -4,6 +4,7 @@ import { deleteStatus } from "@/src/services/api/status";
 import { Button, message, Popconfirm, Space, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
 import AntdStatusModal from "./antdStatusModal";
+import { mapTableFilterData, statusFilterData } from "@/src/services/dataUtils";
 
 export default function AntdStatusTable({ statusData, rolesData }) {
   const defaultRecord = {
@@ -50,22 +51,13 @@ export default function AntdStatusTable({ statusData, rolesData }) {
     if (statusData) setDataSource(statusData);
   }, [statusData]);
 
-  const dataCode = statusData.map((each) => {
-    return { text: each.code, value: each.code };
-  });
-
-  const dataFlag = rolesData.map((each) => {
-    return { text: each.name, value: each.name };
-  });
-
-  const dataStatus = [
-    { text: "Active", value: true },
-    { text: "Inactive", value: false },
-  ];
+  const dataCode = mapTableFilterData(statusData, "code");
+  const dataFlag = mapTableFilterData(rolesData, "name");
+  const dataStatus = statusFilterData;
 
   const columns = [
     {
-      title: "Code",
+      title: "Status Code",
       key: "code",
       dataIndex: "code",
       filters: dataCode,
@@ -101,7 +93,7 @@ export default function AntdStatusTable({ statusData, rolesData }) {
       ),
     },
     {
-      title: "Actions",
+      title: "",
       key: "actions",
       fixed: "right",
       align: "center",

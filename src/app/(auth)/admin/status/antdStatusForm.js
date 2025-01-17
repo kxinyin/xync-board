@@ -1,4 +1,13 @@
-import { Col, ColorPicker, Form, Input, Row, Switch, Transfer } from "antd";
+import {
+  Col,
+  ColorPicker,
+  Divider,
+  Form,
+  Input,
+  Row,
+  Switch,
+  Transfer,
+} from "antd";
 
 export default function AntdStatusForm({
   form,
@@ -11,29 +20,23 @@ export default function AntdStatusForm({
   return (
     <Form form={form} layout="vertical">
       <Row gutter={[16, 16]}>
-        <Col xs={24} md={12}>
-          <Form.Item label="Code" name="code" rules={[{ required: true }]}>
-            <Input placeholder="Enter code" />
+        <Col xs={24} md={16}>
+          <Form.Item
+            label="Status Code"
+            name="code"
+            rules={[{ required: true }]}
+          >
+            <Input placeholder="Enter status code" />
           </Form.Item>
         </Col>
 
-        <Col xs={24} md={6}>
+        <Col xs={12} md={8}>
           <Form.Item label="Color" name="color" rules={[{ required: true }]}>
             <ColorPicker
               showText
               value={color}
               onChangeComplete={handleColorChange}
             />
-          </Form.Item>
-        </Col>
-
-        <Col xs={24} md={6}>
-          <Form.Item
-            label="Status"
-            name="is_enabled"
-            rules={[{ required: true }]}
-          >
-            <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
           </Form.Item>
         </Col>
 
@@ -57,11 +60,26 @@ export default function AntdStatusForm({
               render={(item) => item.name}
               targetKeys={flag}
               onChange={handleTransferChange}
-              listStyle={{ width: 250 }}
+              listStyle={{ width: "100%" }}
             />
           </Form.Item>
         </Col>
       </Row>
+
+      <Divider style={{ margin: "0 0 1.5rem" }}></Divider>
+
+      <Form.Item
+        layout="horizontal"
+        label="Status"
+        name="is_enabled"
+        rules={[{ required: true }]}
+      >
+        <Switch
+          checkedChildren="Active"
+          unCheckedChildren="Inactive"
+          style={{ marginLeft: "6px" }}
+        />
+      </Form.Item>
     </Form>
   );
 }
