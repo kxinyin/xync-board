@@ -14,6 +14,6 @@ export const SUB_MENU_ADMIN = [
   { key: "employee", label: "Employee" },
   { key: "role", label: "Role" },
   { key: "status", label: "Status" },
-  // { key: "client-load-profile", label: "Client Load Profile" },
+  { key: "load-profile", label: "Load Profile" },
   // { key: "whatsapp-template", label: "Whatsapp Template" },
 ];

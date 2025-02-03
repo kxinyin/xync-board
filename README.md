@@ -26,6 +26,7 @@ chore: other changes (e.g., build tasks, dependency updates)
 8. create role module
 9. create status module
 10. create client module
+11. create (admin) load profile module
 
 ## Setup Steps
 
