@@ -60,7 +60,7 @@ export default function AntdEmployeeTable({
         prev.filter((item) => item.employee_id !== employee_id)
       );
 
-      setIsOpenDelete(false);
+      closeDeleteModal();
       messageApi.success(message);
     } else {
       messageApi.error(message);

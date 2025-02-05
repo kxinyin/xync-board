@@ -42,7 +42,7 @@ export default function AntdRoleTable({ rolesData, modulesData }) {
     if (success) {
       setDataSource((prev) => prev.filter((item) => item.role_id !== role_id));
 
-      setIsOpenDelete(false);
+      closeDeleteModal();
       messageApi.success(message);
     } else {
       messageApi.error(message);
