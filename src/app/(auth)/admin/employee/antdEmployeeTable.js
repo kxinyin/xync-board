@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import AntdEmployeeModal from "./antdEmployeeModal";
 import { deleteEmployee } from "@/src/services/api/employee";
 import { mapTableFilterData, statusFilterData } from "@/src/services/dataUtils";
+import ConfirmDeletionRecord from "@/src/components/confirm-deletion/record";
 
 export default function AntdEmployeeTable({
   employeesData,
@@ -30,6 +31,7 @@ export default function AntdEmployeeTable({
   const [dataSource, setDataSource] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [record, setRecord] = useState({ ...defaultRecord });
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const openModal = () => setIsOpen(true);
@@ -39,8 +41,17 @@ export default function AntdEmployeeTable({
     setIsOpen(false);
   };
 
-  const confirmDelete = async (employee_id) => {
+  const openDeleteModal = () => setIsOpenDelete(true);
+
+  const closeDeleteModal = () => {
+    setRecord({ ...defaultRecord });
+    setIsOpenDelete(false);
+  };
+
+  const confirmDelete = async () => {
     setDeleteLoading(true);
+
+    const employee_id = record.employee_id;
 
     const { success, message } = await deleteEmployee(employee_id);
 
@@ -49,6 +60,7 @@ export default function AntdEmployeeTable({
         prev.filter((item) => item.employee_id !== employee_id)
       );
 
+      setIsOpenDelete(false);
       messageApi.success(message);
     } else {
       messageApi.error(message);
@@ -148,8 +160,12 @@ export default function AntdEmployeeTable({
               </span>
             }
             placement="topRight"
-            onConfirm={() => confirmDelete(record.employee_id)}
-            okButtonProps={{ loading: deleteLoading }}
+            onConfirm={() => {
+              setRecord(record);
+              openDeleteModal();
+            }}
+            okButtonProps={{ loading: deleteLoading, danger: true }}
+            okText="Delete"
           >
             <Button color="danger" variant="outlined" size="small">
               Delete
@@ -163,6 +179,15 @@ export default function AntdEmployeeTable({
   return (
     <>
       {contextHolder}
+
+      <ConfirmDeletionRecord
+        open={isOpenDelete}
+        deleteLoading={deleteLoading}
+        handleSubmit={confirmDelete}
+        handleCancel={closeDeleteModal}
+        moduleName="Employee"
+        deleteName={record.username}
+      />
 
       <AntdEmployeeModal
         open={isOpen}

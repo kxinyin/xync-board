@@ -1,4 +1,4 @@
-import { Button, Form, Modal } from "antd";
+import { Form, Modal } from "antd";
 import { useEffect, useState } from "react";
 import AntdRoleForm from "./antdRoleForm";
 import { sortBy } from "lodash";
@@ -84,29 +84,15 @@ export default function AntdRoleModal({
       centered
       width={650}
       maskClosable={false}
+      closable={false}
       open={open}
       title={record?.name || "New Role"}
-      closable={false}
       confirmLoading={confirmLoading}
       onOk={handleSubmit}
       onCancel={handleCancel}
       okButtonProps={{ disabled: confirmLoading }}
-      cancelButtonProps={{ disabled: confirmLoading }}
-      footer={(_, { OkBtn }) => (
-        <>
-          <Button
-            key="cancel"
-            color="danger"
-            variant="outlined"
-            onClick={handleCancel}
-            disabled={confirmLoading}
-          >
-            Cancel
-          </Button>
-
-          <OkBtn />
-        </>
-      )}
+      cancelButtonProps={{ disabled: confirmLoading, danger: true }}
+      okText={isNewRole ? "Create" : "Save"}
     >
       <AntdRoleForm
         form={form}

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import AntdProfileModal from "./antdProfileModal";
 import { deleteLoadProfile } from "@/src/services/api/load-profile";
 import { mapTableFilterData, statusFilterData } from "@/src/services/dataUtils";
+import ConfirmDeletionRecord from "@/src/components/confirm-deletion/record";
 
 export default function AntdProfileTable({ loadProfilesData }) {
   const defaultRecord = { name: "", columns: [], is_enabled: true };
@@ -14,17 +15,27 @@ export default function AntdProfileTable({ loadProfilesData }) {
   const [dataSource, setDataSource] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [record, setRecord] = useState({ ...defaultRecord });
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const openModal = () => setIsOpen(true);
 
   const closeModal = () => {
-    setRecord();
+    setRecord({ ...defaultRecord });
     setIsOpen(false);
   };
 
-  const confirmDelete = async (load_profile_id) => {
+  const openDeleteModal = () => setIsOpenDelete(true);
+
+  const closeDeleteModal = () => {
+    setRecord({ ...defaultRecord });
+    setIsOpenDelete(false);
+  };
+
+  const confirmDelete = async () => {
     setDeleteLoading(true);
+
+    const load_profile_id = record.load_profile_id;
 
     const { success, message } = await deleteLoadProfile(load_profile_id);
 
@@ -33,6 +44,7 @@ export default function AntdProfileTable({ loadProfilesData }) {
         prev.filter((item) => item.load_profile_id !== load_profile_id)
       );
 
+      setIsOpenDelete(false);
       messageApi.success(message);
     } else {
       messageApi.error(message);
@@ -99,8 +111,12 @@ export default function AntdProfileTable({ loadProfilesData }) {
               </span>
             }
             placement="topRight"
-            onConfirm={() => confirmDelete(record.load_profile_id)}
-            okButtonProps={{ loading: deleteLoading }}
+            onConfirm={() => {
+              setRecord(record);
+              openDeleteModal();
+            }}
+            okButtonProps={{ loading: deleteLoading, danger: true }}
+            okText="Delete"
           >
             <Button color="danger" variant="outlined" size="small">
               Delete
@@ -114,6 +130,15 @@ export default function AntdProfileTable({ loadProfilesData }) {
   return (
     <>
       {contextHolder}
+
+      <ConfirmDeletionRecord
+        open={isOpenDelete}
+        deleteLoading={deleteLoading}
+        handleSubmit={confirmDelete}
+        handleCancel={closeDeleteModal}
+        moduleName="Load Profile"
+        deleteName={record.name}
+      />
 
       <AntdProfileModal
         open={isOpen}

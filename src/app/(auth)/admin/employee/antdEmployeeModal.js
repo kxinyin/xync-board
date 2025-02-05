@@ -1,4 +1,4 @@
-import { Button, Form } from "antd";
+import { Form } from "antd";
 import Modal from "antd/es/modal/Modal";
 import { useEffect, useState } from "react";
 import AntdEmployeeForm from "./antdEmployeeForm";
@@ -76,29 +76,15 @@ export default function AntdEmployeeModal({
       centered
       width={650}
       maskClosable={false}
+      closable={false}
       open={open}
       title={record?.name || "New Employee"}
-      closable={false}
       confirmLoading={confirmLoading}
       onOk={handleSubmit}
       onCancel={handleCancel}
       okButtonProps={{ disabled: confirmLoading }}
-      cancelButtonProps={{ disabled: confirmLoading }}
-      footer={(_, { OkBtn }) => (
-        <>
-          <Button
-            key="cancel"
-            color="danger"
-            variant="outlined"
-            onClick={handleCancel}
-            disabled={confirmLoading}
-          >
-            Cancel
-          </Button>
-
-          <OkBtn />
-        </>
-      )}
+      cancelButtonProps={{ disabled: confirmLoading, danger: true }}
+      okText={isNewEmp ? "Create" : "Save"}
     >
       <AntdEmployeeForm
         form={form}
