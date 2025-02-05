@@ -1,5 +1,5 @@
 import { createClient, updateClient } from "@/src/services/api/client";
-import { Button, Form, Modal } from "antd";
+import { Form, Modal } from "antd";
 import { useEffect, useState } from "react";
 import AntdClientForm from "./antdClientForm";
 
@@ -71,29 +71,15 @@ export default function AntdClientModal({
       centered
       width={650}
       maskClosable={false}
+      closable={false}
       open={open}
       title={record?.name || "New Client"}
-      closable={false}
       confirmLoading={confirmLoading}
       onOk={handleSubmit}
       onCancel={handleCancel}
       okButtonProps={{ disabled: confirmLoading }}
-      cancelButtonProps={{ disabled: confirmLoading }}
-      footer={(_, { OkBtn }) => (
-        <>
-          <Button
-            key="cancel"
-            color="danger"
-            variant="outlined"
-            onClick={handleCancel}
-            disabled={confirmLoading}
-          >
-            Cancel
-          </Button>
-
-          <OkBtn />
-        </>
-      )}
+      cancelButtonProps={{ disabled: confirmLoading, danger: true }}
+      okText={isNewClient ? "Create" : "Save"}
     >
       <AntdClientForm form={form} typesData={typesData} />
     </Modal>
