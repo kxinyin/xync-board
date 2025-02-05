@@ -2,29 +2,13 @@
 
 import { Button, message, Popconfirm, Space, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
-import AntdEmployeeModal from "./antdEmployeeModal";
-import { deleteEmployee } from "@/src/services/api/employee";
+import AntdProfileModal from "./antdProfileModal";
+import { deleteLoadProfile } from "@/src/services/api/load-profile";
 import { mapTableFilterData, statusFilterData } from "@/src/services/dataUtils";
 import ConfirmDeletionRecord from "@/src/components/confirm-deletion/record";
 
-export default function AntdEmployeeTable({
-  employeesData,
-  rolesData,
-  branchesData,
-}) {
-  const defaultRecord = {
-    username: "",
-    password: "",
-    name: "",
-    gender: "female",
-    role_name: "",
-    branch_name: "",
-    contact_no: "",
-    new_ic_no: "",
-    old_ic_no: "",
-    address: "",
-    is_enabled: true,
-  };
+export default function AntdProfileTable({ loadProfilesData }) {
+  const defaultRecord = { name: "", columns: [], is_enabled: true };
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -51,13 +35,13 @@ export default function AntdEmployeeTable({
   const confirmDelete = async () => {
     setDeleteLoading(true);
 
-    const employee_id = record.employee_id;
+    const load_profile_id = record.load_profile_id;
 
-    const { success, message } = await deleteEmployee(employee_id);
+    const { success, message } = await deleteLoadProfile(load_profile_id);
 
     if (success) {
       setDataSource((prev) =>
-        prev.filter((item) => item.employee_id !== employee_id)
+        prev.filter((item) => item.load_profile_id !== load_profile_id)
       );
 
       setIsOpenDelete(false);
@@ -70,59 +54,26 @@ export default function AntdEmployeeTable({
   };
 
   useEffect(() => {
-    if (employeesData) setDataSource(employeesData);
-  }, [employeesData]);
+    if (loadProfilesData) setDataSource(loadProfilesData);
+  }, [loadProfilesData]);
 
-  const dataName = mapTableFilterData(employeesData, "name");
-  const dataUsername = mapTableFilterData(employeesData, "username");
-  const dataRole = mapTableFilterData(rolesData, "name", "role_id");
-  const dataBranch = mapTableFilterData(branchesData, "name", "branch_id");
+  const dataName = mapTableFilterData(loadProfilesData, "name");
   const dataStatus = statusFilterData;
 
   const columns = [
     {
-      title: "Employee Name",
+      title: "Load Profile Name",
       key: "name",
       dataIndex: "name",
       filters: dataName,
-      filterSearch: true,
-      onFilter: (value, record) => record.name.startsWith(value),
+      onFilter: (value, record) => record.name === value,
       sorter: (a, b) => a.name.localeCompare(b.name),
-    },
-    {
-      title: "Username",
-      key: "username",
-      dataIndex: "username",
-      filters: dataUsername,
-      filterSearch: true,
-      onFilter: (value, record) => record.username.startsWith(value),
-      sorter: (a, b) => a.username.localeCompare(b.username),
-    },
-    {
-      title: "Role",
-      key: "role_name",
-      dataIndex: "role_name",
-      responsive: ["sm"],
-      filters: dataRole,
-      onFilter: (value, record) => record.role_id === value,
-      sorter: (a, b) => a.role_name.localeCompare(b.role_name),
-    },
-    {
-      title: "Branch",
-      key: "branch_name",
-      dataIndex: "branch_name",
-      align: "center",
-      responsive: ["md"],
-      filters: dataBranch,
-      onFilter: (value, record) => record.branch_name === value,
-      sorter: (a, b) => a.branch_name.localeCompare(b.branch_name),
     },
     {
       title: "Status",
       key: "is_enabled",
       dataIndex: "is_enabled",
       align: "center",
-      responsive: ["md"],
       filters: dataStatus,
       onFilter: (value, record) => record.is_enabled === value,
       sorter: (a, b) => a.is_enabled - b.is_enabled,
@@ -152,11 +103,11 @@ export default function AntdEmployeeTable({
           </Button>
 
           <Popconfirm
-            title="Delete Employee"
+            title="Delete Load Profile"
             description={
               <span>
                 Are you sure you want to delete{" "}
-                <span className="font-black">{record.username}</span>?
+                <span className="font-black">{record.name}</span>?
               </span>
             }
             placement="topRight"
@@ -185,30 +136,59 @@ export default function AntdEmployeeTable({
         deleteLoading={deleteLoading}
         handleSubmit={confirmDelete}
         handleCancel={closeDeleteModal}
-        moduleName="Employee"
-        deleteName={record.username}
+        moduleName="Load Profile"
+        deleteName={record.name}
       />
 
-      <AntdEmployeeModal
+      <AntdProfileModal
         open={isOpen}
         record={record}
         closeModal={closeModal}
         setDataSource={setDataSource}
         messageApi={messageApi}
-        rolesData={rolesData}
-        branchesData={branchesData}
+        defaultDescriptions={dataSource
+          ?.find((profile) => profile.load_profile_id === "1")
+          ?.columns.map(({ id: key, name: label, excel_name: children }) => {
+            return { key, label, children };
+          })}
       />
 
       <div className="flex items-center justify-end pb-6">
-        <Button color="primary" variant="solid" onClick={openModal}>
-          New Employee
-        </Button>
+        <Space>
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={() => {
+              setRecord({
+                ...dataSource.find(
+                  (profile) => profile.load_profile_id === "1"
+                ),
+              });
+              openModal();
+            }}
+          >
+            Default Load Profile
+          </Button>
+
+          <Button
+            color="primary"
+            variant="solid"
+            onClick={() => {
+              setRecord({ ...defaultRecord });
+              openModal();
+            }}
+          >
+            New Load Profile
+          </Button>
+        </Space>
       </div>
 
       <Table
-        dataSource={dataSource.map((data, index) => {
-          return { ...data, key: index };
-        })}
+        dataSource={dataSource
+          .filter((profile) => profile.load_profile_id !== "1")
+          .map((data, index) => {
+            return { ...data, key: index };
+          })}
         columns={columns}
         loading={dataSource.length === 0}
       />

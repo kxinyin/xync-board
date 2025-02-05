@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import AntdRoleModal from "./antdRoleModal";
 import { mapTableFilterData, statusFilterData } from "@/src/services/dataUtils";
 import { deleteRole } from "@/src/services/api/role";
+import ConfirmDeletionRecord from "@/src/components/confirm-deletion/record";
 
 export default function AntdRoleTable({ rolesData, modulesData }) {
   const defaultRecord = { name: "", is_enabled: true, permission: [] };
@@ -14,6 +15,7 @@ export default function AntdRoleTable({ rolesData, modulesData }) {
   const [dataSource, setDataSource] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [record, setRecord] = useState({ ...defaultRecord });
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const openModal = () => setIsOpen(true);
@@ -23,14 +25,24 @@ export default function AntdRoleTable({ rolesData, modulesData }) {
     setIsOpen(false);
   };
 
-  const confirmDelete = async (role_id) => {
+  const openDeleteModal = () => setIsOpenDelete(true);
+
+  const closeDeleteModal = () => {
+    setRecord({ ...defaultRecord });
+    setIsOpenDelete(false);
+  };
+
+  const confirmDelete = async () => {
     setDeleteLoading(true);
+
+    const role_id = record.role_id;
 
     const { success, message } = await deleteRole(role_id);
 
     if (success) {
       setDataSource((prev) => prev.filter((item) => item.role_id !== role_id));
 
+      setIsOpenDelete(false);
       messageApi.success(message);
     } else {
       messageApi.error(message);
@@ -104,8 +116,12 @@ export default function AntdRoleTable({ rolesData, modulesData }) {
               </span>
             }
             placement="topRight"
-            onConfirm={() => confirmDelete(record.role_id)}
-            okButtonProps={{ loading: deleteLoading }}
+            onConfirm={() => {
+              setRecord(record);
+              openDeleteModal();
+            }}
+            okButtonProps={{ loading: deleteLoading, danger: true }}
+            okText="Delete"
           >
             <Button color="danger" variant="outlined" size="small">
               Delete
@@ -119,6 +135,15 @@ export default function AntdRoleTable({ rolesData, modulesData }) {
   return (
     <>
       {contextHolder}
+
+      <ConfirmDeletionRecord
+        open={isOpenDelete}
+        deleteLoading={deleteLoading}
+        handleSubmit={confirmDelete}
+        handleCancel={closeDeleteModal}
+        moduleName="Role"
+        deleteName={record.name}
+      />
 
       <AntdRoleModal
         open={isOpen}

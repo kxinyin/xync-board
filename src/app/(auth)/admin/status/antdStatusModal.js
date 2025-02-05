@@ -1,4 +1,4 @@
-import { Button, Form, Modal } from "antd";
+import { Form, Modal } from "antd";
 import { useEffect, useState } from "react";
 import AntdStatusForm from "./antdStatusForm";
 import { sortBy } from "lodash";
@@ -97,29 +97,15 @@ export default function AntdStatusModal({
       centered
       width={650}
       maskClosable={false}
+      closable={false}
       open={open}
       title={record?.code || "New Status"}
-      closable={false}
       confirmLoading={confirmLoading}
       onOk={handleSubmit}
       onCancel={handleCancel}
       okButtonProps={{ disabled: confirmLoading }}
-      cancelButtonProps={{ disabled: confirmLoading }}
-      footer={(_, { OkBtn }) => (
-        <>
-          <Button
-            key="cancel"
-            color="danger"
-            variant="outlined"
-            onClick={handleCancel}
-            disabled={confirmLoading}
-          >
-            Cancel
-          </Button>
-
-          <OkBtn />
-        </>
-      )}
+      cancelButtonProps={{ disabled: confirmLoading, danger: true }}
+      okText={isNewStatus ? "Create" : "Save"}
     >
       <AntdStatusForm
         form={form}

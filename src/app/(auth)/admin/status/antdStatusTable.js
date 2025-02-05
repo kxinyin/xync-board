@@ -5,6 +5,7 @@ import { Button, message, Popconfirm, Space, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
 import AntdStatusModal from "./antdStatusModal";
 import { mapTableFilterData, statusFilterData } from "@/src/services/dataUtils";
+import ConfirmDeletionRecord from "@/src/components/confirm-deletion/record";
 
 export default function AntdStatusTable({ statusData, rolesData }) {
   const defaultRecord = {
@@ -20,6 +21,7 @@ export default function AntdStatusTable({ statusData, rolesData }) {
   const [dataSource, setDataSource] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [record, setRecord] = useState({ ...defaultRecord });
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const openModal = () => setIsOpen(true);
@@ -29,8 +31,17 @@ export default function AntdStatusTable({ statusData, rolesData }) {
     setIsOpen(false);
   };
 
-  const confirmDelete = async (status_id) => {
+  const openDeleteModal = () => setIsOpenDelete(true);
+
+  const closeDeleteModal = () => {
+    setRecord({ ...defaultRecord });
+    setIsOpenDelete(false);
+  };
+
+  const confirmDelete = async () => {
     setDeleteLoading(true);
+
+    const status_id = record.status_id;
 
     const { success, message } = await deleteStatus(status_id);
 
@@ -39,6 +50,7 @@ export default function AntdStatusTable({ statusData, rolesData }) {
         prev.filter((item) => item.status_id !== status_id)
       );
 
+      setIsOpenDelete(false);
       messageApi.success(message);
     } else {
       messageApi.error(message);
@@ -120,8 +132,12 @@ export default function AntdStatusTable({ statusData, rolesData }) {
               </span>
             }
             placement="topRight"
-            onConfirm={() => confirmDelete(record.status_id)}
-            okButtonProps={{ loading: deleteLoading }}
+            onConfirm={() => {
+              setRecord(record);
+              openDeleteModal();
+            }}
+            okButtonProps={{ loading: deleteLoading, danger: true }}
+            okText="Delete"
           >
             <Button color="danger" variant="outlined" size="small">
               Delete
@@ -135,6 +151,15 @@ export default function AntdStatusTable({ statusData, rolesData }) {
   return (
     <>
       {contextHolder}
+
+      <ConfirmDeletionRecord
+        open={isOpenDelete}
+        deleteLoading={deleteLoading}
+        handleSubmit={confirmDelete}
+        handleCancel={closeDeleteModal}
+        moduleName="Status"
+        deleteName={record.code}
+      />
 
       <AntdStatusModal
         open={isOpen}

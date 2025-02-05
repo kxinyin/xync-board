@@ -1,22 +1,24 @@
-import { Form } from "antd";
-import Modal from "antd/es/modal/Modal";
+import { Form, Modal } from "antd";
 import { useEffect, useState } from "react";
-import AntdEmployeeForm from "./antdEmployeeForm";
-import { createEmployee, updateEmployee } from "@/src/services/api/employee";
+import AntdProfileForm from "./antdProfileForm";
+import {
+  createLoadProfile,
+  updateLoadProfile,
+} from "@/src/services/api/load-profile";
 
-export default function AntdEmployeeModal({
+export default function AntdProfileModal({
   open,
   record,
   closeModal,
   setDataSource,
   messageApi,
-  rolesData,
-  branchesData,
+  defaultDescriptions,
 }) {
   const [form] = Form.useForm();
 
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [isNewEmp, setIsNewEmp] = useState(false);
+  const [isNewLoadProfile, setIsNewLoadProfile] = useState(false);
+  const [isDefaultProfile, setIsDefaultProfile] = useState(false);
 
   const handleSubmit = async () => {
     try {
@@ -24,22 +26,16 @@ export default function AntdEmployeeModal({
 
       const values = await form.validateFields();
 
-      const { success, message, data } = isNewEmp
-        ? await createEmployee(values)
-        : await updateEmployee(record.employee_id, values);
+      const { success, message, data } = isNewLoadProfile
+        ? await createLoadProfile(values)
+        : await updateLoadProfile(record.load_profile_id, values);
 
       if (success) {
-        const selectedRole = rolesData.find(
-          (role) => role.role_id === values.role_id
-        );
-
-        const newData = { ...data, role_name: selectedRole.name };
-
         setDataSource((prev) =>
-          isNewEmp
-            ? [...prev, newData]
+          isNewLoadProfile
+            ? [...prev, data]
             : prev.map((item) =>
-                item.employee_id === data.employee_id ? newData : item
+                item.load_profile_id === data.load_profile_id ? data : item
               )
         );
 
@@ -66,8 +62,9 @@ export default function AntdEmployeeModal({
     if (open && record) {
       form.setFieldsValue(record);
 
-      if (record.employee_id) setIsNewEmp(false);
-      else setIsNewEmp(true);
+      const isDefault = record.load_profile_id === "1";
+      setIsDefaultProfile(isDefault);
+      setIsNewLoadProfile(!record.load_profile_id);
     }
   }, [open, record]);
 
@@ -78,19 +75,22 @@ export default function AntdEmployeeModal({
       maskClosable={false}
       closable={false}
       open={open}
-      title={record?.name || "New Employee"}
+      title={
+        isDefaultProfile
+          ? "Default Load Profile"
+          : record?.name || "New Load Profile"
+      }
       confirmLoading={confirmLoading}
       onOk={handleSubmit}
       onCancel={handleCancel}
       okButtonProps={{ disabled: confirmLoading }}
       cancelButtonProps={{ disabled: confirmLoading, danger: true }}
-      okText={isNewEmp ? "Create" : "Save"}
+      okText={isNewLoadProfile ? "Create" : "Save"}
     >
-      <AntdEmployeeForm
+      <AntdProfileForm
         form={form}
-        isNewEmp={isNewEmp}
-        rolesData={rolesData}
-        branchesData={branchesData}
+        isDefaultProfile={isDefaultProfile}
+        defaultDescriptions={defaultDescriptions}
       />
     </Modal>
   );
