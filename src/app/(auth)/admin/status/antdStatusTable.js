@@ -50,7 +50,7 @@ export default function AntdStatusTable({ statusData, rolesData }) {
         prev.filter((item) => item.status_id !== status_id)
       );
 
-      setIsOpenDelete(false);
+      closeDeleteModal();
       messageApi.success(message);
     } else {
       messageApi.error(message);

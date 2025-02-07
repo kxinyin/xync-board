@@ -44,7 +44,7 @@ export default function AntdProfileTable({ loadProfilesData }) {
         prev.filter((item) => item.load_profile_id !== load_profile_id)
       );
 
-      setIsOpenDelete(false);
+      closeDeleteModal();
       messageApi.success(message);
     } else {
       messageApi.error(message);
