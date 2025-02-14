@@ -4,7 +4,7 @@ import { Button, message, Popconfirm, Space, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
 import AntdEmployeeModal from "./antdEmployeeModal";
 import { deleteEmployee } from "@/src/services/api/employee";
-import { mapTableFilterData, statusFilterData } from "@/src/services/dataUtils";
+import { mapTableFilterData, statusFilterData } from "@/src/lib/utils/dataUtils";
 import ConfirmDeletionRecord from "@/src/components/confirm-deletion/record";
 
 export default function AntdEmployeeTable({

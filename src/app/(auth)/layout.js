@@ -6,7 +6,7 @@ import { LogoutOutlined } from "@ant-design/icons";
 import { redirect, usePathname } from "next/navigation";
 import { logout } from "@/src/auth/helpers";
 import { useEffect, useState } from "react";
-import { getPathParentKey, splitPathname } from "@/src/services/pathUtils";
+import { getPathParentKey, splitPathname } from "@/src/lib/utils/pathUtils";
 import { startCase } from "lodash";
 
 export default function AuthLayout({ children }) {

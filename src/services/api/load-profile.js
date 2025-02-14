@@ -1,4 +1,4 @@
-const { handleRequest } = require("../apiUtils");
+const { handleRequest } = require("../handleRequest");
 
 const apiRequest = handleRequest("Failed to fetch load profiles data");
 

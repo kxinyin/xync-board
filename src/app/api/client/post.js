@@ -1,5 +1,5 @@
 import { connectToDatabase } from "@/src/lib/mongodb";
-import { currentTime } from "@/src/services/timeUtils";
+import { currentTime } from "@/src/lib/utils/timeUtils";
 import { createLog } from "../_helpers/createLog";
 
 export async function POST(request) {

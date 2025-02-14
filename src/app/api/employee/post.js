@@ -1,6 +1,6 @@
 import { connectToDatabase } from "@/src/lib/mongodb";
 import { createLog } from "@/src/app/api/_helpers/createLog";
-import { currentTime } from "@/src/services/timeUtils";
+import { currentTime } from "@/src/lib/utils/timeUtils";
 import { hash } from "bcrypt";
 import { BCRYPT_SALT_ROUNDS } from "@/src/lib/constants";
 

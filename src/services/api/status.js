@@ -1,4 +1,4 @@
-import { handleRequest } from "../apiUtils";
+import { handleRequest } from "../handleRequest";
 
 const apiRequest = handleRequest("Failed to fetch status data");
 

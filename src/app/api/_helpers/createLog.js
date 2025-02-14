@@ -1,5 +1,5 @@
 import { auth } from "@/src/auth";
-import { currentTime } from "@/src/services/timeUtils";
+import { currentTime } from "@/src/lib/utils/timeUtils";
 
 export async function createLog({
   db,
