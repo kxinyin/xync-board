@@ -17,3 +17,5 @@ export const SUB_MENU_ADMIN = [
   { key: "load-profile", label: "Load Profile" },
   // { key: "whatsapp-template", label: "Whatsapp Template" },
 ];
+
+export const API_PAGE_SIZE = 10;
