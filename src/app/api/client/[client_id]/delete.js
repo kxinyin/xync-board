@@ -1,5 +1,5 @@
 import { connectToDatabase } from "@/src/lib/mongodb";
-import { createLog } from "../../_helpers/createLog";
+import { createLog } from "../../../../lib/createLog";
 
 export async function DELETE(request, { params }) {
   const { client_id } = await params;
