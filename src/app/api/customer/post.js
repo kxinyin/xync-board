@@ -1,33 +1,26 @@
+import { generateId } from "@/src/lib/generateId";
 import { connectToDatabase } from "@/src/lib/mongodb";
+import { createLog } from "../_helpers/createLog";
 import { currentTime } from "@/src/lib/utils/timeUtils";
-import { createLog } from "../../../lib/createLog";
 
 export async function POST(request) {
   const incomingData = await request.json();
 
   const { db } = await connectToDatabase();
 
-  const COLLECTION = "load-profiles";
+  const COLLECTION = "customers";
 
-  // Get and update load profile id
-  const parameter = await db
-    .collection("parameters")
-    .findOneAndUpdate(
-      { parameter_id: "load_profile_id" },
-      { $inc: { next_no: 1 }, $set: { updated_at: currentTime() } }
-    );
+  // Get and update ids
+  const customer_id = generateId(db, "customer_id");
 
-  const load_profile_id = `${String(parameter.next_no).padStart(
-    parameter.length,
-    "0"
-  )}`;
-
-  // Add new load profile
+  // Add new customer
   const result = await db.collection(COLLECTION).insertOne({
-    load_profile_id,
+    customer_id,
     ...incomingData,
+    assigned_at: incomingData.employee_id ? currentTime() : "",
     created_at: currentTime(),
     updated_at: "",
+    version: 1,
   });
 
   // Get updated data
@@ -35,16 +28,16 @@ export async function POST(request) {
     .collection(COLLECTION)
     .findOne({ _id: result.insertedId });
 
-  const message = `New load profile added with name: ${updatedData.name}`;
+  const message = `New customer added with name: ${updatedData.name}`;
 
   await createLog({
     db,
-    event_type: "LOAD_PROFILE_CREATE",
+    event_type: "CUSTOMER_CREATE",
     message,
     after: updatedData,
   });
 
-  const { _id, created_at, updated_at, ...returnData } = updatedData;
+  const returnData = { customer_id: updatedData.customer_id };
 
   return new Response(JSON.stringify({ message, data: returnData }), {
     status: 200,

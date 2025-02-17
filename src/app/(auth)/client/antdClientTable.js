@@ -1,7 +1,7 @@
 "use client";
 
 import { deleteClient } from "@/src/services/api/client";
-import { mapTableFilterData, statusFilterData } from "@/src/services/dataUtils";
+import { mapTableFilterData, statusFilterData } from "@/src/lib/utils/dataUtils";
 import { Button, message, Popconfirm, Space, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
 import AntdClientModal from "./antdClientModal";

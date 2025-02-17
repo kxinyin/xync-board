@@ -4,7 +4,7 @@ import { deleteStatus } from "@/src/services/api/status";
 import { Button, message, Popconfirm, Space, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
 import AntdStatusModal from "./antdStatusModal";
-import { mapTableFilterData, statusFilterData } from "@/src/services/dataUtils";
+import { mapTableFilterData, statusFilterData } from "@/src/lib/utils/dataUtils";
 import ConfirmDeletionRecord from "@/src/components/confirm-deletion/record";
 
 export default function AntdStatusTable({ statusData, rolesData }) {

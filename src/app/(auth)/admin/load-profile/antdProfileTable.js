@@ -4,7 +4,7 @@ import { Button, message, Popconfirm, Space, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
 import AntdProfileModal from "./antdProfileModal";
 import { deleteLoadProfile } from "@/src/services/api/load-profile";
-import { mapTableFilterData, statusFilterData } from "@/src/services/dataUtils";
+import { mapTableFilterData, statusFilterData } from "@/src/lib/utils/dataUtils";
 import ConfirmDeletionRecord from "@/src/components/confirm-deletion/record";
 
 export default function AntdProfileTable({ loadProfilesData }) {

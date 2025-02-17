@@ -1,7 +1,7 @@
 "use client";
 
 import { updateCompanyInfo } from "@/src/services/api/company";
-import { scrollToTop } from "@/src/services/scrollUtils";
+import { scrollToTop } from "@/src/lib/utils/scrollUtils";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Col, Form, Input, message, Row, Space } from "antd";
 import { useState } from "react";

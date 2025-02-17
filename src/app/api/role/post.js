@@ -1,6 +1,6 @@
 import { connectToDatabase } from "@/src/lib/mongodb";
-import { currentTime } from "@/src/services/timeUtils";
-import { createLog } from "../_helpers/createLog";
+import { currentTime } from "@/src/lib/utils/timeUtils";
+import { createLog } from "../../../lib/createLog";
 import {
   handleOperations,
   lookupEmployee,

@@ -1,5 +1,5 @@
 import { connectToDatabase } from "@/src/lib/mongodb";
-import { createLog } from "../../_helpers/createLog";
+import { createLog } from "../../../../lib/createLog";
 import { compare } from "bcrypt";
 
 export async function POST(request) {

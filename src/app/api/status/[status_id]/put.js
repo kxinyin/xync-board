@@ -1,7 +1,7 @@
 import { connectToDatabase } from "@/src/lib/mongodb";
-import { currentTime } from "@/src/services/timeUtils";
+import { currentTime } from "@/src/lib/utils/timeUtils";
 import { isEqual } from "lodash";
-import { createLog } from "../../_helpers/createLog";
+import { createLog } from "../../../../lib/createLog";
 
 export async function PUT(request, { params }) {
   const { status_id } = await params;

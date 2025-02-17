@@ -1,4 +1,4 @@
-import { currentTime } from "@/src/services/timeUtils";
+import { currentTime } from "@/src/lib/utils/timeUtils";
 
 export const lookupEmployee = {
   $lookup: {
