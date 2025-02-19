@@ -105,7 +105,7 @@ export function getTableData() {
           $sortArray: {
             input: "$transaction_info",
             sortBy: {
-              paid_date: -1,
+              paid_at: -1,
             },
           },
         },
@@ -113,7 +113,7 @@ export function getTableData() {
     },
     {
       $addFields: {
-        last_paid_date: {
+        last_paid_at: {
           $ifNull: [
             {
               $arrayElemAt: ["$sorted_transactions.paid_at", 0],
@@ -159,7 +159,7 @@ export function getTableData() {
         total_paid: {
           $sum: "$transaction_info.amount",
         },
-        last_paid_date: 1,
+        last_paid_at: 1,
       },
     },
   ];

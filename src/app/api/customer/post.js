@@ -1,6 +1,6 @@
 import { generateId } from "@/src/lib/generateId";
 import { connectToDatabase } from "@/src/lib/mongodb";
-import { createLog } from "../_helpers/createLog";
+import { createLog } from "@/src/lib/createLog";
 import { currentTime } from "@/src/lib/utils/timeUtils";
 
 export async function POST(request) {
