@@ -113,6 +113,20 @@ export function getTableData() {
     },
     {
       $addFields: {
+        total_paid: {
+          $sum: "$transaction_info.amount",
+        },
+      },
+    },
+    {
+      $addFields: {
+        balance: {
+          $subtract: ["$agreement_info.total_amount", "$total_paid"],
+        },
+      },
+    },
+    {
+      $addFields: {
         last_paid_at: {
           $ifNull: [
             {
@@ -152,13 +166,12 @@ export function getTableData() {
         employee_username: "$employee_info.username",
         agreement_no: "$agreement_info.agreement_no",
         agreement_date: "$agreement_info.agreement_date",
-        amount: "$agreement_info.amount",
+        total_amount: "$agreement_info.total_amount",
         next_call_at: "$agreement_info.next_call_at",
         status: "$status_info.code",
         status_color: "$status_info.color",
-        total_paid: {
-          $sum: "$transaction_info.amount",
-        },
+        total_paid: 1,
+        balance: 1,
         last_paid_at: 1,
       },
     },
@@ -167,7 +180,7 @@ export function getTableData() {
 
 export function getSingleData(customer_id) {
   return [
-    { $match: { customer_id, is_enabled: true } },
+    { $match: { customer_id } },
     ...aggregateBatch(),
     ...aggregateClient(),
     ...aggregateEmployee(),

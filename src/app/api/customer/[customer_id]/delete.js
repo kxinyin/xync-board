@@ -1,13 +1,21 @@
 import { connectToDatabase } from "@/src/lib/mongodb";
-import { createLog } from "../../_helpers/createLog";
+import { createLog } from "@/src/lib/createLog";
 
 export async function DELETE(request, { params }) {
   const { customer_id } = await params;
 
+  // Validate input
+  if (!customer_id) {
+    return new Response(
+      JSON.stringify({ message: "No customer ID provided", data: null }),
+      { status: 400 }
+    );
+  }
+
   const { db } = await connectToDatabase();
 
   const COLLECTION = "customers";
-  const FILTER = { customer_id, is_enabled: true };
+  const FILTER = { customer_id };
 
   // Get existing data
   const existingData = await db.collection(COLLECTION).findOne(FILTER);
@@ -22,7 +30,7 @@ export async function DELETE(request, { params }) {
     );
   }
 
-  const message = "Customer deleted successfully";
+  const message = `Successfully deleted customer: ${existingData.username}`;
 
   await createLog({
     db,

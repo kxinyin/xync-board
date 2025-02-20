@@ -6,12 +6,20 @@ import { currentTime } from "@/src/lib/utils/timeUtils";
 export async function POST(request) {
   const incomingData = await request.json();
 
+  // Validate input
+  if (!incomingData || Object.keys(incomingData).length === 0) {
+    return new Response(
+      JSON.stringify({ message: "No customer data provided", data: null }),
+      { status: 400 }
+    );
+  }
+
   const { db } = await connectToDatabase();
 
   const COLLECTION = "customers";
 
   // Get and update ids
-  const customer_id = generateId(db, "customer_id");
+  const customer_id = await generateId(db, "customer_id");
 
   // Add new customer
   const result = await db.collection(COLLECTION).insertOne({

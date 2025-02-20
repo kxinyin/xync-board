@@ -25,7 +25,7 @@ export default async function CustomerPage() {
   //   address: [""],
   //   occupation: "",
   //   guarantor: [],
-  //   reference: [],
+  //   referrer: [],
   //   load_profile_id: "",
   //   load_profile_data: {},
   //   client_id: "",

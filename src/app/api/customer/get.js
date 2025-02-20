@@ -4,10 +4,11 @@ import { getTableData } from "./_helpers";
 
 export async function GET(request) {
   const searchParams = request.nextUrl.searchParams;
-  const page = searchParams.get("page") || 1;
-
-  const PAGE = parseInt(page);
   const PAGE_SIZE = API_PAGE_SIZE;
+
+  let PAGE = parseInt(searchParams.get("page"), 10);
+
+  if (isNaN(PAGE) || PAGE < 1) PAGE = 1;
 
   const { db } = await connectToDatabase();
 
