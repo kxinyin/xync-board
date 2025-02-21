@@ -1,8 +1,8 @@
-import { connectToDatabase } from "@/src/lib/mongodb";
 import { createLog } from "@/src/lib/createLog";
+import { connectToDatabase } from "@/src/lib/mongodb";
 
 export async function DELETE(request, { params }) {
-  const { customer_id } = await params;
+  const { agreement_id } = await params;
 
   const incomingData = await request.json();
 
@@ -23,8 +23,8 @@ export async function DELETE(request, { params }) {
 
   const { db } = await connectToDatabase();
 
-  const COLLECTION = "customers";
-  const FILTER = { customer_id };
+  const COLLECTION = "agreements";
+  const FILTER = { agreement_id };
 
   // Get existing data
   const existingData = await db.collection(COLLECTION).findOne(FILTER);
@@ -36,7 +36,7 @@ export async function DELETE(request, { params }) {
     return new Response(
       JSON.stringify({
         message:
-          "Customer details have been updated elsewhere. Please refresh and try again",
+          "Agreement details have been updated elsewhere. Please refresh and try again",
         data: null,
       }),
       { status: 409 }
@@ -48,16 +48,16 @@ export async function DELETE(request, { params }) {
 
   if (result.deletedCount === 0) {
     return new Response(
-      JSON.stringify({ message: "Customer not found", data: null }),
+      JSON.stringify({ message: "Agreement not found", data: null }),
       { status: 404 }
     );
   }
 
-  const message = `Successfully deleted customer: ${existingData.name}`;
+  const message = `Successfully deleted agreement: ${existingData.agreement_id}`;
 
   await createLog({
     db,
-    event_type: "CUSTOMER_DELETE",
+    event_type: "AGREEMENT_DELETE",
     message,
     before: existingData,
   });

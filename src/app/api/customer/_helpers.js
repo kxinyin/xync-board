@@ -79,7 +79,7 @@ export function getTableData() {
     {
       $lookup: {
         from: "statuses",
-        localField: "agreement_info.status",
+        localField: "agreement_info.status_id",
         foreignField: "status_id",
         as: "status_info",
         pipeline: [{ $match: { is_enabled: true } }],
@@ -168,7 +168,7 @@ export function getTableData() {
         agreement_date: "$agreement_info.agreement_date",
         total_amount: "$agreement_info.total_amount",
         next_call_at: "$agreement_info.next_call_at",
-        status: "$status_info.code",
+        status_code: "$status_info.code",
         status_color: "$status_info.color",
         total_paid: 1,
         balance: 1,

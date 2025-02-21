@@ -34,7 +34,7 @@ export async function PUT(request) {
 
   if (!employee) {
     return new Response(
-      JSON.stringify({ message: "Employee ID does not exist", data: null }),
+      JSON.stringify({ message: "Employee ID not found", data: null }),
       { status: 400 }
     );
   }

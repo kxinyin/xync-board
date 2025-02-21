@@ -4,13 +4,6 @@ import { getSingleData } from "../_helpers";
 export async function GET(request, { params }) {
   const { customer_id } = await params;
 
-  if (!customer_id) {
-    return new Response(
-      JSON.stringify({ message: "No customer ID provided", data: null }),
-      { status: 400 }
-    );
-  }
-
   const { db } = await connectToDatabase();
 
   const customer = await db
@@ -27,7 +20,7 @@ export async function GET(request, { params }) {
 
   return new Response(
     JSON.stringify({
-      message: "Customer details retrieved successfully",
+      message: `Successfully retrieved customer: ${customer.name}`,
       data: customer,
     }),
     { status: 200 }

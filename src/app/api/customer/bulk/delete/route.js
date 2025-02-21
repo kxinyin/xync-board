@@ -40,8 +40,8 @@ export async function DELETE(request) {
 
   const message =
     total_failed > 0
-      ? `${total_deleted} out of ${total} customers deleted successfully, ${total_failed} customers were not found`
-      : `${total_deleted} customers deleted successfully`;
+      ? `Successfully deleted ${total_deleted} out of ${total} customers`
+      : `Successfully deleted ${total_deleted} customers`;
 
   await createLog({
     db,
