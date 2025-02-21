@@ -2,7 +2,7 @@ import { createLog } from "@/src/lib/createLog";
 import { connectToDatabase } from "@/src/lib/mongodb";
 
 export async function DELETE(request, { params }) {
-  const { agreement_id } = await params;
+  const { transaction_id } = await params;
 
   const incomingData = await request.json();
 
@@ -23,8 +23,8 @@ export async function DELETE(request, { params }) {
 
   const { db } = await connectToDatabase();
 
-  const COLLECTION = "agreements";
-  const FILTER = { agreement_id };
+  const COLLECTION = "transactions";
+  const FILTER = { transaction_id };
 
   // Get existing data
   const existingData = await db.collection(COLLECTION).findOne(FILTER);
@@ -36,28 +36,28 @@ export async function DELETE(request, { params }) {
     return new Response(
       JSON.stringify({
         message:
-          "Agreement details have been updated elsewhere. Please refresh and try again",
+          "Transaction details have been updated elsewhere. Please refresh and try again",
         data: null,
       }),
       { status: 409 }
     );
   }
 
-  // Delete agreement
+  // Delete transaction
   const result = await db.collection(COLLECTION).deleteOne(FILTER);
 
   if (result.deletedCount === 0) {
     return new Response(
-      JSON.stringify({ message: "Agreement not found", data: null }),
+      JSON.stringify({ message: "Transaction not found", data: null }),
       { status: 404 }
     );
   }
 
-  const message = `Successfully deleted agreement: ${existingData.agreement_id}`;
+  const message = `Successfully deleted transaction: ${existingData.transaction_id}`;
 
   await createLog({
     db,
-    event_type: "AGREEMENT_DELETE",
+    event_type: "TRANSACTION_DELETE",
     message,
     before: existingData,
   });
