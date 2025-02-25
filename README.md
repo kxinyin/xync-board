@@ -28,7 +28,7 @@ chore: other changes (e.g., build tasks, dependency updates)
 10. create client module
 11. create (admin) load profile module
 12. create confirm deletion modal
-13. create customer module (API - customer, agreement, transaction)
+13. create customer module (API - customer, agreement, transaction, batch)
 
 ## Setup Steps
 
