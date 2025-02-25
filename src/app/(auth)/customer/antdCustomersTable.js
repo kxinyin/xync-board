@@ -7,8 +7,9 @@ import { useEffect, useState } from "react";
 import { getCustomers } from "@/src/services/api/customer";
 import { API_PAGE_SIZE } from "@/src/lib/constants";
 import { mapTableFilterData } from "@/src/lib/utils/dataUtils";
+import { redirect } from "next/navigation";
 
-export default function AntdCustomerTable({}) {
+export default function AntdCustomersTable({}) {
   const defaultRecord = {};
   const pageSize = API_PAGE_SIZE;
 
@@ -49,7 +50,7 @@ export default function AntdCustomerTable({}) {
   const dataAgreementNo = mapTableFilterData(dataSource, "agreement_no");
   const dataNoPlate = mapTableFilterData(dataSource, "no_plate");
   const dataModel = mapTableFilterData(dataSource, "model");
-  const dataStatus = mapTableFilterData(dataSource, "status");
+  const dataStatus = mapTableFilterData(dataSource, "status_code");
   const dataCollector = mapTableFilterData(dataSource, "employee_username");
 
   const columns = [
@@ -142,8 +143,8 @@ export default function AntdCustomerTable({}) {
     { title: "Next Call", key: "next_call_at", dataIndex: "next_call_at" },
     {
       title: "Status",
-      key: "status",
-      dataIndex: "status",
+      key: "status_code",
+      dataIndex: "status_code",
       filters: dataStatus,
       filterSearch: true,
       onFilter: (value, record) => record.status.startsWith(value),
@@ -177,10 +178,7 @@ export default function AntdCustomerTable({}) {
             color="primary"
             variant="outlined"
             size="small"
-            onClick={() => {
-              setRecord(record);
-              // open customer details
-            }}
+            onClick={() => redirect(`/customer/${record.customer_id}`)}
           >
             Edit
           </Button>

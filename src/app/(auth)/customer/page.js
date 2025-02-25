@@ -1,4 +1,4 @@
-import AntdCustomerTable from "./antdCustomerTable";
+import AntdCustomersTable from "./antdCustomersTable";
 
 export const metadata = {
   title: "Customer | Xync Board",
@@ -53,7 +53,7 @@ export default async function CustomerPage() {
 
   return (
     <section className="px-6">
-      <AntdCustomerTable />
+      <AntdCustomersTable />
     </section>
   );
 }
