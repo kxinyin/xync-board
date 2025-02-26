@@ -1,12 +1,22 @@
 import { connectToDatabase } from "@/src/lib/mongodb";
-import { currentTime } from "@/src/services/timeUtils";
+import { currentTime } from "@/src/lib/utils/timeUtils";
 import { isEqual } from "lodash";
-import { createLog } from "../../_helpers/createLog";
+import { createLog } from "../../../../lib/createLog";
+import { aggregateTotalBatch } from "../_helpers";
 
 export async function PUT(request, { params }) {
-  const { client_id } = await params;
+  const newParams = await params;
+  const client_id = newParams.client_id.trim().toUpperCase();
 
   const incomingData = await request.json();
+
+  // Validate input
+  if (!incomingData || Object.keys(incomingData).length === 0) {
+    return new Response(
+      JSON.stringify({ message: "No client data provided", data: null }),
+      { status: 400 }
+    );
+  }
 
   const { db } = await connectToDatabase();
 
@@ -16,20 +26,25 @@ export async function PUT(request, { params }) {
   // Get existing data
   const logBeforeData = await db.collection(COLLECTION).findOne(FILTER);
 
+  if (!logBeforeData) {
+    return new Response(
+      JSON.stringify({ message: "Client not found", data: null }),
+      { status: 404 }
+    );
+  }
+
   // Check for data differences
   const {
     _id: temp1,
     client_id: temp2,
-    batch_next_no: temp3,
-    batch_updated_at: temp4,
-    created_at: temp5,
-    updated_at: temp6,
+    created_at: temp3,
+    updated_at: temp4,
     ...existingData
   } = logBeforeData;
 
-  const isClientEqual = isEqual(existingData, incomingData);
+  const hasSameClient = isEqual(existingData, incomingData);
 
-  if (isClientEqual) {
+  if (hasSameClient) {
     return new Response(
       JSON.stringify({
         message: "Client details are already up-to-date",
@@ -52,20 +67,24 @@ export async function PUT(request, { params }) {
   }
 
   // Get updated data
-  const updatedData = await db.collection(COLLECTION).findOne(FILTER);
+  const updatedData = await db
+    .collection(COLLECTION)
+    .aggregate([{ $match: FILTER }, ...aggregateTotalBatch])
+    .next();
 
-  const message = "Client details updated successfully";
+  const { total_batch, ...logAfterData } = updatedData;
+
+  const message = `Successfully updated client: ${updatedData.name}`;
 
   await createLog({
     db,
     event_type: "CLIENT_UPDATE",
     message,
     before: logBeforeData,
-    after: updatedData,
+    after: logAfterData,
   });
 
-  const { _id, batch_updated_at, created_at, updated_at, ...returnData } =
-    updatedData;
+  const { _id, created_at, updated_at, ...returnData } = updatedData;
 
   return new Response(JSON.stringify({ message, data: returnData }), {
     status: 200,

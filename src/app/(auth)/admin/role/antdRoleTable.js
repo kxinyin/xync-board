@@ -3,7 +3,7 @@
 import { Button, message, Popconfirm, Space, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
 import AntdRoleModal from "./antdRoleModal";
-import { mapTableFilterData, statusFilterData } from "@/src/services/dataUtils";
+import { mapTableFilterData, statusFilterData } from "@/src/lib/utils/dataUtils";
 import { deleteRole } from "@/src/services/api/role";
 import ConfirmDeletionRecord from "@/src/components/confirm-deletion/record";
 

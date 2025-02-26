@@ -1,7 +1,10 @@
 "use client";
 
 import { deleteClient } from "@/src/services/api/client";
-import { mapTableFilterData, statusFilterData } from "@/src/services/dataUtils";
+import {
+  mapTableFilterData,
+  statusFilterData,
+} from "@/src/lib/utils/dataUtils";
 import { Button, message, Popconfirm, Space, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
 import AntdClientModal from "./antdClientModal";
@@ -127,12 +130,11 @@ export default function AntdClientTable({ clientsData, typesData }) {
     },
     {
       title: "Total Batch",
-      key: "batch_next_no",
-      dataIndex: "batch_next_no",
+      key: "total_batch",
+      dataIndex: "total_batch",
       align: "center",
       responsive: ["xl"],
-      render: (value) => value - 1,
-      sorter: (a, b) => a.batch_next_no - b.batch_next_no,
+      sorter: (a, b) => a.total_batch - b.total_batch,
     },
     {
       title: "Status",
