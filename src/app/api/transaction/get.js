@@ -17,7 +17,18 @@ export async function GET(request) {
     .collection("transactions")
     .find(
       { agreement_id },
-      { projection: { _id: 0, transaction_id: 1, amount: 1, paid_at: 1 } }
+      {
+        projection: {
+          _id: 0,
+          transaction_id: 1,
+          amount: 1,
+          paid_at: 1,
+          receipt_no: 1,
+          collected_by: 1,
+          created_by: 1,
+          version: 1,
+        },
+      }
     )
     .toArray();
 
