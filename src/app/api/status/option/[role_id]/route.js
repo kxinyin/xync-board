@@ -8,21 +8,24 @@ export async function GET(request, { params }) {
   const status = await db
     .collection("statuses")
     .find(
-      { is_enabled: true, flag: { $in: [String(role_id)] } },
+      {
+        is_enabled: true,
+        flag: { $in: [role_id.trim().toUpperCase()] },
+      },
       { projection: { _id: 0, status_id: 1, code: 1, color: 1 } }
     )
     .toArray();
 
-  if (!status) {
+  if (status.length === 0) {
     return new Response(
-      JSON.stringify({ message: "No status found", data: null }),
+      JSON.stringify({ message: "No status found", data: [] }),
       { status: 404 }
     );
   }
 
   return new Response(
     JSON.stringify({
-      message: "Status data retrieved successfully",
+      message: `Successfully retrieved all statuses for role: ${role_id}`,
       data: status,
     }),
     { status: 200 }

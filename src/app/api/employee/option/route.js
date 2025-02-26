@@ -2,7 +2,15 @@ import { connectToDatabase } from "@/src/lib/mongodb";
 
 export async function GET(request) {
   const searchParams = request.nextUrl.searchParams;
-  const role_id = searchParams.get("role_id");
+  const role_id = searchParams.get("role_id")?.trim().toUpperCase();
+
+  // Validate input
+  if (role_id === "") {
+    return new Response(
+      JSON.stringify({ message: "No role ID provided", data: null }),
+      { status: 400 }
+    );
+  }
 
   const { db } = await connectToDatabase();
 
@@ -13,9 +21,9 @@ export async function GET(request) {
     .find(FILTER, { projection: { _id: 0, employee_id: 1, username: 1 } })
     .toArray();
 
-  if (!employees) {
+  if (employees.length === 0) {
     return new Response(
-      JSON.stringify({ message: "No employees found", data: null }),
+      JSON.stringify({ message: "No employees found", data: [] }),
       { status: 404 }
     );
   }
