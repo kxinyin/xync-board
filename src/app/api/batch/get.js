@@ -31,7 +31,7 @@ export async function GET(request) {
 
   return new Response(
     JSON.stringify({
-      message: `Successfully retrieved ${PAGE_SIZE} batches on page ${PAGE}`,
+      message: `Successfully retrieved ${batches.length} batches on page ${PAGE}`,
       data: batches,
     }),
     { status: 200 }

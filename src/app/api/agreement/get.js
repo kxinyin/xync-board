@@ -47,7 +47,7 @@ export async function GET(request) {
         },
       },
     ])
-    .toArray();
+    .next();
 
   if (!agreements) {
     return new Response(
@@ -58,7 +58,7 @@ export async function GET(request) {
 
   return new Response(
     JSON.stringify({
-      message: `Successfully retrieved all agreements for customer: ${customer_id}`,
+      message: `Successfully retrieved agreement for customer: ${customer_id}`,
       data: agreements,
     }),
     { status: 200 }

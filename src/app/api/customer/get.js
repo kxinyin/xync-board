@@ -30,7 +30,7 @@ export async function GET(request) {
 
   return new Response(
     JSON.stringify({
-      message: "Successfully retrieved all customers",
+      message: `Successfully retrieved ${customers.length} customers on page ${PAGE}`,
       data: customers,
     }),
     { status: 200 }
